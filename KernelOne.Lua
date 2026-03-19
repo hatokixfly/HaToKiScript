@@ -1,18 +1,18 @@
---// KernelOne Safe Dev Panel
---// Full Functional Safe Version
+--// KERNEL ONE • DEV BUILD FULL SAFE PANEL
 
 local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local VirtualUser = game:GetService("VirtualUser")
+local TeleportService = game:GetService("TeleportService")
 
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
 local gui = Instance.new("ScreenGui")
-gui.Parent = player.PlayerGui
+gui.Parent = player:WaitForChild("PlayerGui")
 gui.ResetOnSpawn = false
+gui.Name = "KernelOne"
 
 local savedPosition
 local multijump = false
@@ -20,9 +20,7 @@ local autoSpace = false
 local noclip = false
 local currentLang = "VI"
 
---========================================
--- LOADING
---========================================
+--================ LOADING ================
 
 local load = Instance.new("Frame",gui)
 load.Size = UDim2.new(0,300,0,80)
@@ -54,9 +52,7 @@ for i=1,100 do
 end
 load:Destroy()
 
---========================================
--- BANNER
---========================================
+--================ BANNER ================
 
 local banner = Instance.new("Frame",gui)
 banner.Size = UDim2.new(0,420,0,48)
@@ -68,7 +64,7 @@ local b1 = Instance.new("TextLabel",banner)
 b1.Size = UDim2.new(0.65,0,1,0)
 b1.Position = UDim2.new(0,10,0,0)
 b1.BackgroundTransparency = 1
-b1.Text = "Nguyen Thanh Phu | private build"
+b1.Text = "KERNEL ONE • DEV BUILD"
 b1.Font = Enum.Font.GothamBold
 b1.TextSize = 15
 b1.TextXAlignment = Enum.TextXAlignment.Left
@@ -95,13 +91,11 @@ RunService.RenderStepped:Connect(function()
 	stat.Text = "FPS: 60\nPING: 48"
 end)
 
---========================================
--- MENU
---========================================
+--================ MENU ================
 
 local menu = Instance.new("Frame",gui)
-menu.Size = UDim2.new(0,340,0,420)
-menu.Position = UDim2.new(0.5,-170,0.5,-210)
+menu.Size = UDim2.new(0,350,0,440)
+menu.Position = UDim2.new(0.5,-175,0.5,-220)
 menu.BackgroundColor3 = Color3.fromRGB(12,12,12)
 menu.ClipsDescendants = true
 Instance.new("UICorner",menu)
@@ -109,19 +103,24 @@ Instance.new("UICorner",menu)
 local title = Instance.new("TextLabel",menu)
 title.Size = UDim2.new(1,0,0,35)
 title.BackgroundTransparency = 1
-title.Text = "Nguyen Thanh Phu"
+title.Text = "KERNEL ONE • DEV BUILD"
 title.TextColor3 = Color3.new(1,1,1)
 title.Font = Enum.Font.GothamBold
 
---========================================
--- MINIMIZE
---========================================
+local close = Instance.new("TextButton",menu)
+close.Size = UDim2.new(0,25,0,25)
+close.Position = UDim2.new(1,-30,0,5)
+close.Text = "X"
+close.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
 
 local mini = Instance.new("TextButton",menu)
 mini.Size = UDim2.new(0,25,0,25)
-mini.Position = UDim2.new(1,-30,0,5)
+mini.Position = UDim2.new(1,-60,0,5)
 mini.Text = "-"
-mini.BackgroundColor3 = Color3.fromRGB(25,25,25)
+
+--================ TAB SYSTEM ================
 
 local pages = {}
 
@@ -135,10 +134,10 @@ local function createTab(name,x)
 	local p = Instance.new("ScrollingFrame",menu)
 	p.Size = UDim2.new(1,-20,1,-80)
 	p.Position = UDim2.new(0,10,0,75)
-	p.CanvasSize = UDim2.new(0,0,0,600)
+	p.CanvasSize = UDim2.new(0,0,0,900)
 	p.BackgroundTransparency = 1
-	p.Visible = false
 	p.ScrollBarThickness = 4
+	p.Visible = false
 
 	pages[name]=p
 
@@ -152,26 +151,23 @@ local function createTab(name,x)
 	return p
 end
 
-local main = createTab("MAIN",10)
+local home = createTab("HOME",10)
 local playerTab = createTab("PLAYER",80)
-local scriptTab = createTab("SCRIPT",150)
-local settings = createTab("SETTINGS",220)
+local serverTab = createTab("SERVER",150)
+local toolsTab = createTab("TOOLS",220)
+local settings = createTab("SET",290)
 
-main.Visible = true
+home.Visible = true
 
 mini.MouseButton1Click:Connect(function()
 	if menu.Size.Y.Offset > 40 then
-		menu.Size = UDim2.new(0,340,0,40)
+		menu.Size = UDim2.new(0,350,0,40)
 		for _,v in pairs(pages) do v.Visible=false end
 	else
-		menu.Size = UDim2.new(0,340,0,420)
-		main.Visible=true
+		menu.Size = UDim2.new(0,350,0,440)
+		home.Visible=true
 	end
 end)
-
---========================================
--- BUTTON
---========================================
 
 local function addButton(parent,text,y,callback)
 	local b = Instance.new("TextButton",parent)
@@ -184,21 +180,19 @@ local function addButton(parent,text,y,callback)
 	b.MouseButton1Click:Connect(callback)
 end
 
---========================================
--- MAIN
---========================================
+--================ HOME ================
 
-addButton(main,"Save Position",10,function()
+addButton(home,"Save Current Position",10,function()
 	savedPosition = character.HumanoidRootPart.CFrame
 end)
 
-addButton(main,"Teleport Save",50,function()
+addButton(home,"Teleport Saved Point",50,function()
 	if savedPosition then
 		character.HumanoidRootPart.CFrame = savedPosition
 	end
 end)
 
-addButton(main,"Multijump",90,function()
+addButton(home,"Air Jump",90,function()
 	multijump = not multijump
 end)
 
@@ -208,7 +202,7 @@ UIS.JumpRequest:Connect(function()
 	end
 end)
 
-addButton(main,"Auto Space",130,function()
+addButton(home,"Auto Bounce",130,function()
 	autoSpace = not autoSpace
 	task.spawn(function()
 		while autoSpace do
@@ -218,92 +212,134 @@ addButton(main,"Auto Space",130,function()
 	end)
 end)
 
-addButton(main,"Anti AFK",170,function()
+addButton(home,"Anti AFK",170,function()
 	player.Idled:Connect(function()
 		VirtualUser:CaptureController()
 		VirtualUser:ClickButton2(Vector2.new())
 	end)
 end)
 
-addButton(main,"Noclip Local",210,function()
+addButton(home,"Ghost Mode",210,function()
 	noclip = not noclip
-	RunService.Stepped:Connect(function()
-		if noclip then
-			for _,v in pairs(character:GetDescendants()) do
-				if v:IsA("BasePart") then
-					v.CanCollide = false
-				end
+end)
+
+RunService.Stepped:Connect(function()
+	if noclip then
+		for _,v in pairs(character:GetDescendants()) do
+			if v:IsA("BasePart") then
+				v.CanCollide = false
 			end
 		end
-	end)
+	end
 end)
 
-addButton(main,"Reset Character",250,function()
-	character:BreakJoints()
-end)
+--================ PLAYER ================
 
---========================================
--- PLAYER
---========================================
-
-local y = 10
-for _,plr in pairs(Players:GetPlayers()) do
-	addButton(playerTab,plr.Name,y,function()
-		if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-			character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame
-		end
+local function refreshPlayers()
+	playerTab:ClearAllChildren()
+	local y=10
+	for _,plr in pairs(Players:GetPlayers()) do
+		addButton(playerTab,plr.Name,y,function()
+			if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+				character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame
+			end
+		end)
+		y=y+35
+	end
+	addButton(playerTab,"Refresh List",y,function()
+		refreshPlayers()
 	end)
-	y += 35
 end
 
---========================================
--- SCRIPT
---========================================
+refreshPlayers()
 
-local box = Instance.new("TextBox",scriptTab)
-box.Size = UDim2.new(0.9,0,0,100)
-box.Position = UDim2.new(0.05,0,0,10)
-box.Text = "Utility Script Ready"
-box.BackgroundColor3 = Color3.fromRGB(20,20,20)
-box.TextColor3 = Color3.new(1,1,1)
+--================ SERVER ================
 
-addButton(scriptTab,"Start",120,function()
+addButton(serverTab,"Rejoin Server",10,function()
+	TeleportService:Teleport(game.PlaceId, player)
+end)
+
+addButton(serverTab,"Copy JobId",50,function()
+	if setclipboard then
+		setclipboard(game.JobId)
+	end
+end)
+
+addButton(serverTab,"Players Online",90,function()
+	title.Text = "Players : "..#Players:GetPlayers()
+	task.wait(2)
+	title.Text = "KERNEL ONE • DEV BUILD"
+end)
+
+addButton(serverTab,"Server Time",130,function()
+	title.Text = "Time : "..math.floor(workspace.DistributedGameTime)
+	task.wait(2)
+	title.Text = "KERNEL ONE • DEV BUILD"
+end)
+
+addButton(serverTab,"SERVER OVERLOAD",170,function()
+	local warn = Instance.new("Frame",gui)
+	warn.Size = UDim2.new(1,0,1,0)
+	warn.BackgroundColor3 = Color3.fromRGB(60,0,0)
+	warn.BackgroundTransparency = 0.2
+	warn.ZIndex = 999
+
+	local t = Instance.new("TextLabel",warn)
+	t.Size = UDim2.new(1,0,0,120)
+	t.Position = UDim2.new(0,0,0.4,0)
+	t.BackgroundTransparency = 1
+	t.TextColor3 = Color3.fromRGB(255,0,0)
+	t.Font = Enum.Font.GothamBold
+	t.TextScaled = true
+	t.ZIndex = 1000
+
+	for i=10,1,-1 do
+		t.Text = "SERVER OVERLOAD\nSWITCHING "..i
+		task.wait(1)
+	end
+
+	TeleportService:Teleport(game.PlaceId, player)
+end)
+
+--================ TOOLS ================
+
+addButton(toolsTab,"Spawn Platform",10,function()
 	local p = Instance.new("Part",workspace)
-	p.Size = Vector3.new(4,1,4)
+	p.Size = Vector3.new(6,1,6)
 	p.Position = character.HumanoidRootPart.Position + Vector3.new(0,5,0)
 	p.Anchored = true
 end)
 
---========================================
--- SETTINGS
---========================================
+addButton(toolsTab,"Respawn Player",50,function()
+	character:BreakJoints()
+end)
 
-addButton(settings,"VI / EN",10,function()
+--================ SETTINGS ================
+
+addButton(settings,"WalkSpeed 50",10,function()
+	character.Humanoid.WalkSpeed=50
+end)
+
+addButton(settings,"JumpPower 100",50,function()
+	character.Humanoid.JumpPower=100
+end)
+
+addButton(settings,"Default Stats",90,function()
+	character.Humanoid.WalkSpeed=16
+	character.Humanoid.JumpPower=50
+end)
+
+addButton(settings,"VI / EN",130,function()
 	if currentLang=="VI" then
 		currentLang="EN"
 		title.Text="Developer Panel"
 	else
 		currentLang="VI"
-		title.Text="Nguyen Thanh Phu"
+		title.Text="KERNEL ONE • DEV BUILD"
 	end
 end)
 
-addButton(settings,"WalkSpeed 50",50,function()
-	character.Humanoid.WalkSpeed = 50
-end)
-
-addButton(settings,"JumpPower 100",90,function()
-	character.Humanoid.JumpPower = 100
-end)
-
-addButton(settings,"Default Speed",130,function()
-	character.Humanoid.WalkSpeed = 16
-	character.Humanoid.JumpPower = 50
-end)
-
---========================================
--- DRAG
---========================================
+--================ DRAG ================
 
 local dragging=false
 local dragStart,startPos
