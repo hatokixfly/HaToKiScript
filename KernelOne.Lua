@@ -27,179 +27,143 @@ gui.ResetOnSpawn = false
 --====================================================
 
 local function notify(text)
-	pcall(function()
-		local notif = Instance.new("Frame")
-		notif.Parent = gui
-		notif.Size = UDim2.new(0,240,0,45)
-		notif.Position = UDim2.new(1,-260,0,20)
-		notif.BackgroundColor3 = Color3.fromRGB(15,15,15)
-		notif.BorderSizePixel = 0
-		Instance.new("UICorner", notif).CornerRadius = UDim.new(0,10)
+	local notif = Instance.new("Frame")
+	notif.Parent = gui
+	notif.Size = UDim2.new(0,220,0,40)
+	notif.Position = UDim2.new(1,-240,0,20)
+	notif.BackgroundColor3 = Color3.fromRGB(15,15,15)
+	notif.BorderSizePixel = 0
+	Instance.new("UICorner", notif)
 
-		local label = Instance.new("TextLabel")
-		label.Parent = notif
-		label.Size = UDim2.new(1,0,1,0)
-		label.BackgroundTransparency = 1
-		label.Text = text
-		label.TextColor3 = Color3.new(1,1,1)
-		label.Font = Enum.Font.GothamBold
-		label.TextSize = 14
+	local txt = Instance.new("TextLabel")
+	txt.Parent = notif
+	txt.Size = UDim2.new(1,0,1,0)
+	txt.BackgroundTransparency = 1
+	txt.Text = text
+	txt.TextColor3 = Color3.new(1,1,1)
+	txt.Font = Enum.Font.GothamBold
+	txt.TextSize = 13
 
-		notif.BackgroundTransparency = 1
-		label.TextTransparency = 1
+	notif.BackgroundTransparency = 1
+	txt.TextTransparency = 1
 
-		TweenService:Create(notif,TweenInfo.new(0.25),{
-			BackgroundTransparency = 0
-		}):Play()
+	TweenService:Create(notif,TweenInfo.new(0.25),{BackgroundTransparency=0}):Play()
+	TweenService:Create(txt,TweenInfo.new(0.25),{TextTransparency=0}):Play()
 
-		TweenService:Create(label,TweenInfo.new(0.25),{
-			TextTransparency = 0
-		}):Play()
+	task.wait(2)
 
-		task.wait(2)
+	TweenService:Create(notif,TweenInfo.new(0.25),{BackgroundTransparency=1}):Play()
+	TweenService:Create(txt,TweenInfo.new(0.25),{TextTransparency=1}):Play()
 
-		TweenService:Create(notif,TweenInfo.new(0.25),{
-			BackgroundTransparency = 1
-		}):Play()
-
-		TweenService:Create(label,TweenInfo.new(0.25),{
-			TextTransparency = 1
-		}):Play()
-
-		task.wait(0.3)
-		notif:Destroy()
-	end)
+	task.wait(0.3)
+	notif:Destroy()
 end
 
 --====================================================
 -- LOADING
 --====================================================
 
-local loading = Instance.new("Frame")
-loading.Parent = gui
-loading.Size = UDim2.new(0,300,0,120)
-loading.Position = UDim2.new(0.5,-150,0.5,-60)
+local loading = Instance.new("Frame", gui)
+loading.Size = UDim2.new(0,260,0,100)
+loading.Position = UDim2.new(0.5,-130,0.5,-50)
 loading.BackgroundColor3 = Color3.fromRGB(10,10,10)
 loading.BorderSizePixel = 0
-Instance.new("UICorner", loading).CornerRadius = UDim.new(0,12)
+Instance.new("UICorner", loading)
 
-local loadingText = Instance.new("TextLabel")
-loadingText.Parent = loading
-loadingText.Size = UDim2.new(1,0,0,40)
-loadingText.BackgroundTransparency = 1
-loadingText.Text = "Loading 1%"
-loadingText.TextColor3 = Color3.new(1,1,1)
-loadingText.Font = Enum.Font.GothamBold
-loadingText.TextSize = 18
+local txt = Instance.new("TextLabel", loading)
+txt.Size = UDim2.new(1,0,0,35)
+txt.BackgroundTransparency = 1
+txt.Text = "Loading 1%"
+txt.TextColor3 = Color3.new(1,1,1)
+txt.Font = Enum.Font.GothamBold
+txt.TextSize = 17
 
-local progressBg = Instance.new("Frame")
-progressBg.Parent = loading
-progressBg.Size = UDim2.new(0.8,0,0,16)
-progressBg.Position = UDim2.new(0.1,0,0.65,0)
-progressBg.BackgroundColor3 = Color3.fromRGB(30,30,30)
-progressBg.BorderSizePixel = 0
-Instance.new("UICorner", progressBg)
+local bg = Instance.new("Frame", loading)
+bg.Size = UDim2.new(0.8,0,0,14)
+bg.Position = UDim2.new(0.1,0,0.65,0)
+bg.BackgroundColor3 = Color3.fromRGB(25,25,25)
+bg.BorderSizePixel = 0
+Instance.new("UICorner", bg)
 
-local progress = Instance.new("Frame")
-progress.Parent = progressBg
-progress.Size = UDim2.new(0,0,1,0)
-progress.BackgroundColor3 = Color3.fromRGB(255,0,60)
-progress.BorderSizePixel = 0
-Instance.new("UICorner", progress)
+local fill = Instance.new("Frame", bg)
+fill.Size = UDim2.new(0,0,1,0)
+fill.BackgroundColor3 = Color3.fromRGB(255,0,60)
+fill.BorderSizePixel = 0
+Instance.new("UICorner", fill)
 
-for i = 1,100 do
-	loadingText.Text = "Loading "..i.."%"
-	progress.Size = UDim2.new(i/100,0,1,0)
-	task.wait(0.015)
+for i=1,100 do
+	txt.Text = "Loading "..i.."%"
+	fill.Size = UDim2.new(i/100,0,1,0)
+	task.wait(0.01)
 end
 
-TweenService:Create(loading,TweenInfo.new(0.35),{
-	BackgroundTransparency = 1
-}):Play()
-
-task.wait(0.4)
 loading:Destroy()
-
 notify("Script By: KERNELX")
 
 --====================================================
 -- LOGO
 --====================================================
 
-local logo = Instance.new("TextButton")
-logo.Parent = gui
+local logo = Instance.new("TextButton", gui)
 logo.Size = UDim2.new(0,50,0,50)
 logo.Position = UDim2.new(0,20,0.4,0)
 logo.BackgroundColor3 = Color3.fromRGB(20,20,20)
 logo.Text = "K"
 logo.TextColor3 = Color3.fromRGB(255,0,80)
 logo.Font = Enum.Font.GothamBold
-logo.TextSize = 28
+logo.TextSize = 26
 logo.BorderSizePixel = 0
 Instance.new("UICorner", logo).CornerRadius = UDim.new(1,0)
-
-local draggingLogo = false
-local dragStartLogo
-local startPosLogo
-
-logo.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		draggingLogo = true
-		dragStartLogo = input.Position
-		startPosLogo = logo.Position
-	end
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		draggingLogo = false
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if draggingLogo and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = input.Position - dragStartLogo
-		logo.Position = UDim2.new(
-			startPosLogo.X.Scale,
-			startPosLogo.X.Offset + delta.X,
-			startPosLogo.Y.Scale,
-			startPosLogo.Y.Offset + delta.Y
-		)
-	end
-end)
 
 --====================================================
 -- MENU
 --====================================================
 
-local menu = Instance.new("Frame")
-menu.Parent = gui
-menu.Size = UDim2.new(0,430,0,520)
-menu.Position = UDim2.new(0.5,-215,0.5,-260)
+local menu = Instance.new("Frame", gui)
+menu.Size = UDim2.new(0,330,0,400)
+menu.Position = UDim2.new(0.5,-165,0.5,-200)
 menu.BackgroundColor3 = Color3.fromRGB(12,12,12)
-menu.BorderSizePixel = 0
 menu.Visible = false
-Instance.new("UICorner", menu).CornerRadius = UDim.new(0,14)
+menu.BorderSizePixel = 0
+Instance.new("UICorner", menu)
 
 -- title
-local title = Instance.new("TextLabel")
-title.Parent = menu
-title.Size = UDim2.new(1,0,0,40)
+local title = Instance.new("TextLabel", menu)
+title.Size = UDim2.new(1,0,0,35)
 title.BackgroundTransparency = 1
 title.Text = "Nguyen Thanh Phu"
 title.Font = Enum.Font.GothamBold
-title.TextSize = 20
+title.TextSize = 18
 
 task.spawn(function()
 	while true do
-		for h = 0,1,0.01 do
+		for h=0,1,0.01 do
 			title.TextColor3 = Color3.fromHSV(h,1,1)
 			task.wait(0.03)
 		end
 	end
 end)
 
--- drag menu
+-- minimize
+local mini = Instance.new("TextButton", menu)
+mini.Size = UDim2.new(0,30,0,25)
+mini.Position = UDim2.new(1,-35,0,5)
+mini.Text = "-"
+mini.BackgroundColor3 = Color3.fromRGB(25,25,25)
+mini.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", mini)
+
+local minimized = false
+mini.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	if minimized then
+		TweenService:Create(menu,TweenInfo.new(0.25),{Size=UDim2.new(0,330,0,40)}):Play()
+	else
+		TweenService:Create(menu,TweenInfo.new(0.25),{Size=UDim2.new(0,330,0,400)}):Play()
+	end
+end)
+
+-- draggable
 local dragging = false
 local dragStart
 local startPos
@@ -221,171 +185,127 @@ end)
 UserInputService.InputChanged:Connect(function(input)
 	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
 		local delta = input.Position - dragStart
-		menu.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
+		menu.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset+delta.X,startPos.Y.Scale,startPos.Y.Offset+delta.Y)
 	end
 end)
 
 --====================================================
--- FUNCTIONS
+-- TAB SYSTEM
 --====================================================
 
-local yPos = 55
+local tabs = {}
+local pages = {}
 
-local function createButton(text, callback)
-	local btn = Instance.new("TextButton")
-	btn.Parent = menu
-	btn.Size = UDim2.new(0.85,0,0,35)
-	btn.Position = UDim2.new(0.075,0,0,yPos)
-	btn.BackgroundColor3 = Color3.fromRGB(25,25,25)
-	btn.Text = text
+local function createTab(name,x)
+	local btn = Instance.new("TextButton", menu)
+	btn.Size = UDim2.new(0,90,0,30)
+	btn.Position = UDim2.new(0,x,0,45)
+	btn.Text = name
+	btn.BackgroundColor3 = Color3.fromRGB(20,20,20)
 	btn.TextColor3 = Color3.new(1,1,1)
-	btn.Font = Enum.Font.GothamBold
-	btn.TextSize = 14
-	btn.BorderSizePixel = 0
-	Instance.new("UICorner", btn).CornerRadius = UDim.new(0,8)
+	Instance.new("UICorner", btn)
 
-	btn.MouseEnter:Connect(function()
-		TweenService:Create(btn,TweenInfo.new(0.15),{
-			BackgroundColor3 = Color3.fromRGB(35,35,35)
-		}):Play()
+	local page = Instance.new("Frame", menu)
+	page.Size = UDim2.new(1,-20,1,-90)
+	page.Position = UDim2.new(0,10,0,85)
+	page.BackgroundTransparency = 1
+	page.Visible = false
+
+	tabs[name]=btn
+	pages[name]=page
+
+	btn.MouseButton1Click:Connect(function()
+		for _,p in pairs(pages) do p.Visible=false end
+		page.Visible=true
 	end)
 
-	btn.MouseLeave:Connect(function()
-		TweenService:Create(btn,TweenInfo.new(0.15),{
-			BackgroundColor3 = Color3.fromRGB(25,25,25)
-		}):Play()
-	end)
-
-	btn.MouseButton1Click:Connect(callback)
-
-	yPos += 42
-	return btn
+	return page
 end
 
-local function createToggle(text, callback)
-	local state = false
-	local btn
+local mainPage = createTab("MAIN",10)
+local weaponPage = createTab("WEAPON",110)
+local debugPage = createTab("DEBUG",210)
 
-	btn = createButton(text.." : OFF", function()
-		state = not state
-		btn.Text = text.." : "..(state and "ON" or "OFF")
-		callback(state)
-		notify(text.." "..(state and "ON" or "OFF"))
-	end)
+pages["MAIN"].Visible=true
+
+--====================================================
+-- BUTTON CREATOR
+--====================================================
+
+local function addButton(parent,text,y,callback)
+	local b = Instance.new("TextButton", parent)
+	b.Size = UDim2.new(0.9,0,0,32)
+	b.Position = UDim2.new(0.05,0,0,y)
+	b.Text = text
+	b.BackgroundColor3 = Color3.fromRGB(25,25,25)
+	b.TextColor3 = Color3.new(1,1,1)
+	Instance.new("UICorner", b)
+	b.MouseButton1Click:Connect(callback)
 end
 
-local function savePosition()
+-- MAIN TAB
+addButton(mainPage,"Save Position",10,function()
 	local hrp = character:FindFirstChild("HumanoidRootPart")
 	if hrp then
 		savedPosition = hrp.CFrame
 		notify("Position Saved")
 	end
-end
+end)
 
-local function teleportSaved()
+addButton(mainPage,"Teleport Saved",50,function()
 	local hrp = character:FindFirstChild("HumanoidRootPart")
 	if hrp and savedPosition then
 		hrp.CFrame = savedPosition
 		notify("Teleported")
 	end
-end
+end)
 
-local function getTool()
-	local tool = character:FindFirstChildOfClass("Tool")
-	if tool then
-		return tool.Name
-	end
-	return "None"
-end
-
---====================================================
--- BUTTONS
---====================================================
-
-createButton("Save Position", savePosition)
-createButton("Tele Position", teleportSaved)
-
-createToggle("Auto Jump", function(state)
-	autoJump = state
-	if state then
+addButton(mainPage,"Auto Jump Toggle",90,function()
+	autoJump = not autoJump
+	notify("Auto Jump "..(autoJump and "ON" or "OFF"))
+	if autoJump then
 		task.spawn(function()
 			while autoJump do
 				local hum = character:FindFirstChildOfClass("Humanoid")
-				if hum then hum.Jump = true end
+				if hum then hum.Jump=true end
 				task.wait(0.5)
 			end
 		end)
 	end
 end)
 
-createButton("Detect Tool", function()
-	notify("Tool: "..getTool())
+-- WEAPON TAB (safe placeholder only)
+addButton(weaponPage,"Mode Stick",10,function()
+	selectedWeapon="Stick"
+	notify("Stick")
 end)
 
-createButton("Weapon Mode Stick", function()
-	selectedWeapon = "Stick"
-	notify("Mode Stick")
+addButton(weaponPage,"Mode Gun",50,function()
+	selectedWeapon="Gun"
+	notify("Gun")
 end)
 
-createButton("Weapon Mode Gun", function()
-	selectedWeapon = "Gun"
-	notify("Mode Gun")
+addButton(weaponPage,"Mode Brainrot",90,function()
+	selectedWeapon="Brainrot"
+	notify("Brainrot")
 end)
 
-createButton("Weapon Mode Brainrot", function()
-	selectedWeapon = "Brainrot"
-	notify("Mode Brainrot")
+addButton(weaponPage,"Damage Preview",130,function()
+	notify("Damage Placeholder")
 end)
 
--- damage box
-local damageBox = Instance.new("TextBox")
-damageBox.Parent = menu
-damageBox.Size = UDim2.new(0.85,0,0,35)
-damageBox.Position = UDim2.new(0.075,0,0,yPos)
-damageBox.Text = "192382832534"
-damageBox.BackgroundColor3 = Color3.fromRGB(20,20,20)
-damageBox.TextColor3 = Color3.new(1,1,1)
-damageBox.Font = Enum.Font.Gotham
-damageBox.TextSize = 14
-Instance.new("UICorner", damageBox)
-
-yPos += 42
-
-createButton("Damage Preview", function()
-	notify("Damage: "..damageBox.Text)
+-- DEBUG TAB
+addButton(debugPage,"Detect Tool",10,function()
+	local tool = character:FindFirstChildOfClass("Tool")
+	notify(tool and tool.Name or "None")
 end)
 
--- item box
-local itemBox = Instance.new("TextBox")
-itemBox.Parent = menu
-itemBox.Size = UDim2.new(0.85,0,0,35)
-itemBox.Position = UDim2.new(0.075,0,0,yPos)
-itemBox.Text = "Item Name"
-itemBox.BackgroundColor3 = Color3.fromRGB(20,20,20)
-itemBox.TextColor3 = Color3.new(1,1,1)
-itemBox.Font = Enum.Font.Gotham
-itemBox.TextSize = 14
-Instance.new("UICorner", itemBox)
-
-yPos += 42
-
-createButton("Trigger Item Placeholder", function()
-	notify("Item: "..itemBox.Text)
-end)
-
-createButton("Character HP", function()
+addButton(debugPage,"Character HP",50,function()
 	local hum = character:FindFirstChildOfClass("Humanoid")
-	if hum then
-		notify("HP: "..math.floor(hum.Health))
-	end
+	if hum then notify("HP "..math.floor(hum.Health)) end
 end)
 
-createButton("Refresh Character", function()
+addButton(debugPage,"Refresh Character",90,function()
 	character = player.Character or player.CharacterAdded:Wait()
 	notify("Refreshed")
 end)
@@ -395,23 +315,7 @@ end)
 --====================================================
 
 local opened = false
-
 logo.MouseButton1Click:Connect(function()
 	opened = not opened
-
-	if opened then
-		menu.Visible = true
-		menu.Size = UDim2.new(0,0,0,0)
-
-		TweenService:Create(menu,TweenInfo.new(0.35),{
-			Size = UDim2.new(0,430,0,520)
-		}):Play()
-	else
-		local tween = TweenService:Create(menu,TweenInfo.new(0.3),{
-			Size = UDim2.new(0,0,0,0)
-		})
-		tween:Play()
-		tween.Completed:Wait()
-		menu.Visible = false
-	end
+	menu.Visible = opened
 end)
