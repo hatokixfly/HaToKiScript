@@ -1,12 +1,11 @@
---// Nguyen Thanh Phu Developer Panel
---// Premium Safe Developer Version
---// Script By: KERNELX
+--// KernelOne Premium Safe Panel
+--// Nguyen Thanh Phu Build
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
-local VirtualUser = game:GetService("VirtualUser")
 local RunService = game:GetService("RunService")
+local VirtualUser = game:GetService("VirtualUser")
 
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
@@ -14,21 +13,58 @@ local character = player.Character or player.CharacterAdded:Wait()
 local gui = Instance.new("ScreenGui")
 gui.Parent = player:WaitForChild("PlayerGui")
 gui.ResetOnSpawn = false
+gui.Name = "KernelOne"
 
 local savedPosition
 local multijump = false
 local autoSpace = false
+local currentLang = "VI"
 
---====================================================
+--========================================
+-- LOADING
+--========================================
+
+local loadFrame = Instance.new("Frame", gui)
+loadFrame.Size = UDim2.new(0,300,0,80)
+loadFrame.Position = UDim2.new(0.5,-150,0.5,-40)
+loadFrame.BackgroundColor3 = Color3.fromRGB(10,10,10)
+Instance.new("UICorner", loadFrame)
+
+local txt = Instance.new("TextLabel", loadFrame)
+txt.Size = UDim2.new(1,0,0,30)
+txt.BackgroundTransparency = 1
+txt.TextColor3 = Color3.new(1,1,1)
+txt.Font = Enum.Font.GothamBold
+txt.TextSize = 16
+
+local bar = Instance.new("Frame", loadFrame)
+bar.Size = UDim2.new(0.9,0,0,18)
+bar.Position = UDim2.new(0.05,0,0.6,0)
+bar.BackgroundColor3 = Color3.fromRGB(25,25,25)
+Instance.new("UICorner", bar)
+
+local fill = Instance.new("Frame", bar)
+fill.Size = UDim2.new(0,0,1,0)
+fill.BackgroundColor3 = Color3.fromRGB(180,0,255)
+Instance.new("UICorner", fill)
+
+for i=1,100 do
+	txt.Text = "Loading "..i.."%"
+	fill.Size = UDim2.new(i/100,0,1,0)
+	task.wait(0.015)
+end
+
+loadFrame:Destroy()
+
+--========================================
 -- NOTIFY
---====================================================
+--========================================
 
 local function notify(t)
 	local f = Instance.new("Frame", gui)
-	f.Size = UDim2.new(0,220,0,40)
-	f.Position = UDim2.new(1,-240,0,20)
+	f.Size = UDim2.new(0,220,0,35)
+	f.Position = UDim2.new(1,-230,0,20)
 	f.BackgroundColor3 = Color3.fromRGB(15,15,15)
-	f.BorderSizePixel = 0
 	Instance.new("UICorner", f)
 
 	local l = Instance.new("TextLabel", f)
@@ -44,48 +80,57 @@ local function notify(t)
 	end)
 end
 
---====================================================
--- TOP BANNER
---====================================================
+--========================================
+-- BANNER FPS
+--========================================
 
 local banner = Instance.new("Frame", gui)
-banner.Size = UDim2.new(0,500,0,60)
-banner.Position = UDim2.new(0.5,-250,0,10)
+banner.Size = UDim2.new(0,420,0,48)
+banner.Position = UDim2.new(0.5,-210,0,8)
 banner.BackgroundColor3 = Color3.fromRGB(8,8,8)
 banner.BorderSizePixel = 0
 Instance.new("UICorner", banner)
 
-local titleBanner = Instance.new("TextLabel", banner)
-titleBanner.Size = UDim2.new(0.7,0,1,0)
-titleBanner.Position = UDim2.new(0,10,0,0)
-titleBanner.BackgroundTransparency = 1
-titleBanner.Text = "Nguyen Thanh Phu Panel | private build"
-titleBanner.TextColor3 = Color3.fromRGB(180,0,255)
-titleBanner.Font = Enum.Font.GothamBold
-titleBanner.TextSize = 18
-titleBanner.TextXAlignment = Enum.TextXAlignment.Left
+local bannerText = Instance.new("TextLabel", banner)
+bannerText.Size = UDim2.new(0.65,0,1,0)
+bannerText.Position = UDim2.new(0,10,0,0)
+bannerText.BackgroundTransparency = 1
+bannerText.Text = "Nguyen Thanh Phu | private build"
+bannerText.Font = Enum.Font.GothamBold
+bannerText.TextSize = 15
+bannerText.TextXAlignment = Enum.TextXAlignment.Left
 
-local stats = Instance.new("TextLabel", banner)
-stats.Size = UDim2.new(0,120,1,0)
-stats.Position = UDim2.new(1,-120,0,0)
-stats.BackgroundTransparency = 1
-stats.TextColor3 = Color3.fromRGB(255,220,100)
-stats.Font = Enum.Font.GothamBold
-stats.TextSize = 14
+local stat = Instance.new("TextLabel", banner)
+stat.Size = UDim2.new(0,90,1,0)
+stat.Position = UDim2.new(1,-95,0,0)
+stat.BackgroundTransparency = 1
+stat.Font = Enum.Font.GothamBold
+stat.TextSize = 12
 
-RunService.RenderStepped:Connect(function()
-	stats.Text = "FPS: "..math.floor(1 / RunService.RenderStepped:Wait()).."\nPING: 48ms"
+task.spawn(function()
+	while true do
+		for h=0,1,0.01 do
+			local c = Color3.fromHSV(h,1,1)
+			bannerText.TextColor3 = c
+			stat.TextColor3 = c
+			task.wait(0.03)
+		end
+	end
 end)
 
---====================================================
+RunService.RenderStepped:Connect(function()
+	stat.Text = "FPS: 60\nPING: 48"
+end)
+
+--========================================
 -- MENU
---====================================================
+--========================================
 
 local menu = Instance.new("Frame", gui)
-menu.Size = UDim2.new(0,360,0,430)
-menu.Position = UDim2.new(0.5,-180,0.5,-215)
+menu.Size = UDim2.new(0,330,0,400)
+menu.Position = UDim2.new(0.5,-165,0.5,-200)
 menu.BackgroundColor3 = Color3.fromRGB(12,12,12)
-menu.BorderSizePixel = 0
+menu.ClipsDescendants = true
 Instance.new("UICorner", menu)
 
 local title = Instance.new("TextLabel", menu)
@@ -93,240 +138,219 @@ title.Size = UDim2.new(1,0,0,35)
 title.BackgroundTransparency = 1
 title.Text = "Nguyen Thanh Phu"
 title.Font = Enum.Font.GothamBold
-title.TextSize = 18
+title.TextSize = 17
+title.TextColor3 = Color3.new(1,1,1)
 
-task.spawn(function()
-	while true do
-		for h=0,1,0.01 do
-			title.TextColor3 = Color3.fromHSV(h,1,1)
-			task.wait(0.03)
-		end
-	end
-end)
-
---====================================================
+--========================================
 -- MINIMIZE
---====================================================
+--========================================
 
-local minus = Instance.new("TextButton", menu)
-minus.Size = UDim2.new(0,25,0,25)
-minus.Position = UDim2.new(1,-60,0,5)
-minus.Text = "-"
-minus.BackgroundColor3 = Color3.fromRGB(25,25,25)
+local mini = Instance.new("TextButton", menu)
+mini.Size = UDim2.new(0,25,0,25)
+mini.Position = UDim2.new(1,-30,0,5)
+mini.Text = "-"
+mini.BackgroundColor3 = Color3.fromRGB(25,25,25)
 
-local plus = Instance.new("TextButton", menu)
-plus.Size = UDim2.new(0,25,0,25)
-plus.Position = UDim2.new(1,-30,0,5)
-plus.Text = "+"
-plus.BackgroundColor3 = Color3.fromRGB(25,25,25)
+local minimized = false
+local normalSize = UDim2.new(0,330,0,400)
+local miniSize = UDim2.new(0,330,0,40)
 
-minus.MouseButton1Click:Connect(function()
-	menu.Size = UDim2.new(0,360,0,40)
-end)
-
-plus.MouseButton1Click:Connect(function()
-	menu.Size = UDim2.new(0,360,0,430)
-end)
-
---====================================================
--- DRAG
---====================================================
-
-local dragging=false
-local dragStart,startPos
-
-menu.InputBegan:Connect(function(input)
-	if input.UserInputType==Enum.UserInputType.MouseButton1 then
-		dragging=true
-		dragStart=input.Position
-		startPos=menu.Position
-	end
-end)
-
-UIS.InputEnded:Connect(function(input)
-	if input.UserInputType==Enum.UserInputType.MouseButton1 then
-		dragging=false
-	end
-end)
-
-UIS.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType==Enum.UserInputType.MouseMovement then
-		local delta=input.Position-dragStart
-		menu.Position=UDim2.new(
-			startPos.X.Scale,startPos.X.Offset+delta.X,
-			startPos.Y.Scale,startPos.Y.Offset+delta.Y
-		)
-	end
-end)
-
---====================================================
+--========================================
 -- TAB SYSTEM
---====================================================
+--========================================
 
-local pages={}
+local pages = {}
 
-local function tab(name,x)
-	local b=Instance.new("TextButton",menu)
-	b.Size=UDim2.new(0,65,0,28)
-	b.Position=UDim2.new(0,x,0,45)
-	b.Text=name
-	b.BackgroundColor3=Color3.fromRGB(20,20,20)
+local function createTab(name,x)
+	local b = Instance.new("TextButton", menu)
+	b.Size = UDim2.new(0,60,0,25)
+	b.Position = UDim2.new(0,x,0,40)
+	b.Text = name
+	b.BackgroundColor3 = Color3.fromRGB(20,20,20)
 
-	local p=Instance.new("Frame",menu)
-	p.Size=UDim2.new(1,-20,1,-90)
-	p.Position=UDim2.new(0,10,0,85)
-	p.BackgroundTransparency=1
-	p.Visible=false
+	local p = Instance.new("Frame", menu)
+	p.Size = UDim2.new(1,-20,1,-80)
+	p.Position = UDim2.new(0,10,0,75)
+	p.BackgroundTransparency = 1
+	p.Visible = false
 
-	pages[name]=p
+	pages[name] = p
 
 	b.MouseButton1Click:Connect(function()
-		for _,v in pairs(pages) do v.Visible=false end
-		p.Visible=true
+		for _,v in pairs(pages) do
+			v.Visible = false
+		end
+		p.Visible = true
 	end)
 
 	return p
 end
 
-local main=tab("MAIN",10)
-local esp=tab("ESP",80)
-local server=tab("SERVER",150)
-local playerTab=tab("PLAYER",230)
-local scriptTab=tab("SCRIPT",300)
+local main = createTab("MAIN",10)
+local playerTab = createTab("PLAYER",80)
+local scriptTab = createTab("SCRIPT",150)
+local settings = createTab("SETTINGS",220)
 
-main.Visible=true
+main.Visible = true
 
-local function btn(parent,text,y,cb)
-	local b=Instance.new("TextButton",parent)
-	b.Size=UDim2.new(0.9,0,0,30)
-	b.Position=UDim2.new(0.05,0,0,y)
-	b.Text=text
-	b.BackgroundColor3=Color3.fromRGB(25,25,25)
-	b.TextColor3=Color3.new(1,1,1)
-	Instance.new("UICorner",b)
-	b.MouseButton1Click:Connect(cb)
+mini.MouseButton1Click:Connect(function()
+	minimized = not minimized
+
+	if minimized then
+		menu.Size = miniSize
+		for _,v in pairs(pages) do
+			v.Visible = false
+		end
+	else
+		menu.Size = normalSize
+		main.Visible = true
+	end
+end)
+
+--========================================
+-- BUTTON
+--========================================
+
+local function addButton(parent,text,y,callback)
+	local b = Instance.new("TextButton", parent)
+	b.Size = UDim2.new(0.9,0,0,30)
+	b.Position = UDim2.new(0.05,0,0,y)
+	b.Text = text
+	b.BackgroundColor3 = Color3.fromRGB(25,25,25)
+	b.TextColor3 = Color3.new(1,1,1)
+	Instance.new("UICorner", b)
+	b.MouseButton1Click:Connect(callback)
 end
 
---====================================================
+--========================================
 -- MAIN
---====================================================
+--========================================
 
-btn(main,"Lưu vị trí",10,function()
-	local hrp=character:FindFirstChild("HumanoidRootPart")
+addButton(main,"Save Position",10,function()
+	local hrp = character:FindFirstChild("HumanoidRootPart")
 	if hrp then
-		savedPosition=hrp.CFrame
-		notify("Đã lưu vị trí")
+		savedPosition = hrp.CFrame
+		notify("Saved")
 	end
 end)
 
-btn(main,"Quay lại vị trí",50,function()
-	local hrp=character:FindFirstChild("HumanoidRootPart")
+addButton(main,"Teleport Save",50,function()
+	local hrp = character:FindFirstChild("HumanoidRootPart")
 	if hrp and savedPosition then
-		hrp.CFrame=savedPosition
+		hrp.CFrame = savedPosition
 	end
 end)
 
-btn(main,"Multijump",90,function()
+addButton(main,"Multijump",90,function()
 	multijump = not multijump
-	notify("Multijump "..(multijump and "ON" or "OFF"))
+	notify("Multijump")
 end)
 
 UIS.JumpRequest:Connect(function()
 	if multijump then
-		local hum=character:FindFirstChildOfClass("Humanoid")
-		if hum then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
+		local hum = character:FindFirstChildOfClass("Humanoid")
+		if hum then
+			hum:ChangeState(Enum.HumanoidStateType.Jumping)
+		end
 	end
 end)
 
-btn(main,"Anti AFK",130,function()
+addButton(main,"Anti AFK",130,function()
 	player.Idled:Connect(function()
 		VirtualUser:CaptureController()
 		VirtualUser:ClickButton2(Vector2.new())
 	end)
-	notify("Anti AFK ON")
 end)
 
-btn(main,"Auto Space",170,function()
+addButton(main,"Auto Space",170,function()
 	autoSpace = not autoSpace
 	task.spawn(function()
 		while autoSpace do
-			local hum=character:FindFirstChildOfClass("Humanoid")
-			if hum then hum.Jump=true end
+			local hum = character:FindFirstChildOfClass("Humanoid")
+			if hum then hum.Jump = true end
 			task.wait(0.3)
 		end
 	end)
 end)
 
---====================================================
--- ESP (placeholder safe)
---====================================================
-
-btn(esp,"ESP BOX",10,function()
-	notify("ESP Box placeholder")
-end)
-
-btn(esp,"ESP LINE",50,function()
-	notify("ESP Line placeholder")
-end)
-
-btn(esp,"ESP HP",90,function()
-	notify("ESP HP placeholder")
-end)
-
---====================================================
--- SERVER SAFE
---====================================================
-
-btn(server,"Đổi server",10,function()
-	game:GetService("TeleportService"):Teleport(game.PlaceId, player)
-end)
-
-btn(server,"Mô phỏng mất kết nối",50,function()
-	local fake = Instance.new("TextLabel", gui)
-	fake.Size=UDim2.new(1,0,0,50)
-	fake.Position=UDim2.new(0,0,0.4,0)
-	fake.BackgroundTransparency=1
-	fake.Text="SERVER CONNECTION LOST"
-	fake.TextColor3=Color3.new(1,0,0)
-	fake.Font=Enum.Font.GothamBold
-	fake.TextSize=32
-	task.wait(5)
-	fake:Destroy()
-end)
-
---====================================================
+--========================================
 -- PLAYER
---====================================================
+--========================================
 
-local y=10
+local y = 10
 for _,plr in pairs(Players:GetPlayers()) do
-	btn(playerTab,plr.Name,y,function()
+	addButton(playerTab,plr.Name,y,function()
 		if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
 			character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame
 		end
 	end)
-	y += 35
+	y = y + 35
 end
 
---====================================================
+--========================================
 -- SCRIPT
---====================================================
+--========================================
 
 local box = Instance.new("TextBox", scriptTab)
-box.Size=UDim2.new(0.9,0,0,100)
-box.Position=UDim2.new(0.05,0,0,10)
-box.Text="-- nhập script test"
-box.BackgroundColor3=Color3.fromRGB(20,20,20)
-box.TextColor3=Color3.new(1,1,1)
+box.Size = UDim2.new(0.9,0,0,100)
+box.Position = UDim2.new(0.05,0,0,10)
+box.Text = "-- script"
+box.BackgroundColor3 = Color3.fromRGB(20,20,20)
+box.TextColor3 = Color3.new(1,1,1)
 
-btn(scriptTab,"Start",120,function()
+addButton(scriptTab,"Start",120,function()
 	print(box.Text)
-	notify("Script captured")
+	notify("Executed")
 end)
 
-local logoBox = Instance.new("TextBox", scriptTab)
-logoBox.Size=UDim2.new(0.9,0,0,30)
-logoBox.Position=UDim2.new(0.05,0,0,160)
-logoBox.Text="Nhập Logo ID"
-logoBox.BackgroundColor3=Color3.fromRGB(20,20,20)
-logoBox.TextColor3=Color3.new(1,1,1)
+--========================================
+-- SETTINGS
+--========================================
+
+local function applyLang()
+	if currentLang == "VI" then
+		title.Text = "Nguyen Thanh Phu"
+	else
+		title.Text = "Nguyen Thanh Phu Panel"
+	end
+end
+
+addButton(settings,"VI / EN",10,function()
+	if currentLang == "VI" then
+		currentLang = "EN"
+	else
+		currentLang = "VI"
+	end
+	applyLang()
+end)
+
+--========================================
+-- DRAG
+--========================================
+
+local dragging = false
+local dragStart,startPos
+
+menu.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = menu.Position
+	end
+end)
+
+UIS.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = false
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+		local delta = input.Position - dragStart
+		menu.Position = UDim2.new(
+			startPos.X.Scale,startPos.X.Offset + delta.X,
+			startPos.Y.Scale,startPos.Y.Offset + delta.Y
+		)
+	end
+end)
